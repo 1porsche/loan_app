@@ -1,0 +1,33 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:loan_app/features/articles/ioc/ioc.dart';
+import 'package:loan_app/features/articles/presentation/providers/providers.dart';
+import 'package:loan_app/features/user_profile/presentation/providers/stats_provider.dart';
+import 'package:loan_app/i18n/i18n.dart';
+
+class ProviderWrapper extends StatelessWidget {
+  const ProviderWrapper({
+    Key? key,
+    required this.child,
+  }) : super(key: key);
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ArticlesProvider>.value(
+          value: ArticlesIOC.articlesProvider,
+        ),
+        ChangeNotifierProvider<StatsProvider>(
+          create: (_) => StatsProvider()..getStats(),
+        ),
+        ChangeNotifierProvider<L10nProvider>(
+          create: (_) => LocalizationIOC.l10nProvider(),
+        )
+      ],
+      child: child,
+    );
+  }
+}
